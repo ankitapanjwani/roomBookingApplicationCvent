@@ -29,7 +29,7 @@ export let useStyles = makeStyles((theme)=>({
     },
     roomImage:{
         height: "100%",
-        width:"100%"
+        width:"90%"
     },
     roomCategory:{
         padding: "20px",
@@ -151,7 +151,7 @@ export let useStyles = makeStyles((theme)=>({
         height: "150px"
     },
     booknowbtnContainer:{
-        right: "1rem",
+        right: "7rem",
         position:"absolute",
         
     },

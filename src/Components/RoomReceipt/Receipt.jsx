@@ -1,4 +1,4 @@
-import { Box, Container, Paper, Typography } from "@material-ui/core";
+import { Box, Button, Container, Paper, Typography } from "@material-ui/core";
 import React from "react";
 import { Link } from "react-router-dom";
 import Footer from "../Footer/Footer";
@@ -17,21 +17,34 @@ function Receipt(props) {
 
 
   //final checkIn formatted date
+
+
   let finalCheckIn =
-    checkinDate.getFullYear() +
-    (checkinDate.getMonth() > 9 ? "-" : "-0") +
-    checkinDate.getMonth() +
-    "-" +
-    checkinDate.getDate();
+  checkinDate?.getFullYear() +
+      ((checkinDate?.getMonth() + 1)> 9 ? "-" : "-0") +
+      (checkinDate?.getMonth() +1)+
+      "-" +
+      checkinDate?.getDate();
+
+
+  // let finalCheckIn =
+  //   checkinDate.getFullYear() +
+  //   (checkinDate.getMonth() > 9 ? "-" : "-0") +
+  //   checkinDate.getMonth() +
+  //   "-" +
+  //   checkinDate.getDate();
 
  //final checkOut formatted date
     let finalCheckOut =
     checkoutDate.getFullYear() +
     (checkoutDate.getMonth() > 9 ? "-" : "-0") +
-    checkoutDate.getMonth() +
+    (checkoutDate.getMonth() +1) +
     "-" +
     checkoutDate.getDate();
-
+    const handleBackToRooms = () => {
+      // console.log("in handle rooms checkin date", checkInDateFinal);
+      props.history.push(`/allRooms?checkIn=${finalCheckIn}`);
+    };
 
   return (
     <div>
@@ -89,6 +102,11 @@ function Receipt(props) {
            
           </Box>
         </Paper>
+      
+          <Button className={classes.bookNowBtn}   onClick={handleBackToRooms}>
+            Back to Rooms
+          </Button>
+        
       </Container>
       <Footer />
     </div>

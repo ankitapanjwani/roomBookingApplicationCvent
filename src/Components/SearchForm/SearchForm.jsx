@@ -37,6 +37,7 @@ function SearchForm(props) {
           const response = await getUsersData(userFinalId);
           console.log("data in search form",response);
           setFormData(response);
+          // console.log("get USERS RESPONSE CHECKIN", response);
           setuserEmail(response.email);
         }
         catch(error){
@@ -58,10 +59,11 @@ function SearchForm(props) {
     }));
   };
   
+  console.log("FORM STATE", formData.checkIn);
   const handleSubmit = async (event) => {
     event.preventDefault();
-    console.log("In handle submit");
-    console.log("form", formData);
+    // console.log("In handle submit");
+    // console.log("form", formData.checkIn);
 
     let checkInDateFULL = new Date(formData.checkIn);
     let checkOutDateFULL = new Date(formData.checkOut);
@@ -81,6 +83,8 @@ function SearchForm(props) {
       "-" +
       checkinDay;
   
+      // console.log("CheckIN date Final", checkInDateFinal);
+      // console.log("CheckIN day Final", checkinDay);
     let checkOutDateFinal =
       checkoutYear +
       (checkoutMonth > 9 ? "-" : "-0") +
@@ -88,16 +92,19 @@ function SearchForm(props) {
       "-" +
       checkoutDay;
 
+
+      // console.log("CheckOUT date Final", checkOutDateFinal);
     let userDetail = {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
-        checkIn: checkInDateFinal,
-        checkOut: checkOutDateFinal,
+        checkIn: formData.checkIn,
+        checkOut: formData.checkOut,
       };
       
     if(formData.email === useremail){
         console.log("in IF BLOCK");
+        console.log("USER FINAL ID:", userFinalId);
         try {
             const res = await axios.put(
               `http://localhost:5000/user/updateUserDetails/${userFinalId}`,
@@ -121,15 +128,15 @@ console.log("In else ");
 
     //   setDataId(res.data._id);
       let userId = res.data._id;
-      console.log("res of user  id Details", res.data._id);
-      console.log("res of user Details", res.data);
+      // console.log("res of user  id Details", res.data._id);
+      // console.log("res of user Details", res.data);
 
         localStorage.setItem('UserId',JSON.stringify(userId));
-
+        
+      } catch (err) {
+        console.log(err);
+      }
       props.history.push(`/allRooms?checkIn=${checkInDateFinal}`);
-    } catch (err) {
-      console.log(err);
-    }
 }
   };
 

@@ -24,27 +24,14 @@ function RoomDetails(props) {
   const [extras, setExtras] = useState([]);
   const roomId = props.match.params.id;
   const userId = JSON.parse(localStorage.getItem("UserId"));
-//   let checkinDate = new Date(userdata.checkIn);
-// console.log("user checkin", checkinDate );
-//   let checkInDateFinal =
-//   checkinDate?.getFullYear() +
-//       (checkinDate?.getMonth() > 9 ? "-" : "-0") +
-//       (checkinDate?.getMonth() +1)
-//       "-" +
-//       checkinDate?.getDate();
-
-
-
-// console.log("check i datew final", checkInDateFinal);
+  
 
   const userCheckInCheckOut = {
     checkIn: userdata.checkIn,
     checkOut: userdata.checkOut,
   };
-
- 
-
-
+  console.log("users RESPONSE", userdata);
+console.log("user checkin from object", userCheckInCheckOut.checkIn, "checkout", userCheckInCheckOut.checkOut);
   const handleBookNow = () => {
     axios
       .put(
@@ -78,9 +65,10 @@ function RoomDetails(props) {
 
     (async function () {
       try {
-        const response = await getUsersData(userId);
-        console.log("users data in detail page", response);
-        setuserData(response);
+        const responseUser = await getUsersData(userId);
+        // console.log("users data in detail page", response);
+        setuserData(responseUser);
+        console.log("response get user", responseUser);
       } catch (error) {
         console.log(error);
       }
@@ -93,24 +81,23 @@ function RoomDetails(props) {
   // console.log("User data in Detail Page", userdata);
   console.log(
     "User checkin checkout in Detail Page",
-    userdata.checkIn,
-    userdata.checkOut
+    userCheckInCheckOut.checkIn,
+    userCheckInCheckOut.checkOut
   );
 
-
   let checkinDate = new Date(userdata.checkIn);
-console.log("user checkin", checkinDate );
+  console.log("user checkin", checkinDate);
   let checkInDateFinal =
-  checkinDate?.getFullYear() +
-      ((checkinDate?.getMonth() + 1)> 9 ? "-" : "-0") +
-      (checkinDate?.getMonth() +1)+
-      "-" +
-      checkinDate?.getDate();
-
-  const handleBackToRooms = () =>{
+    checkinDate?.getFullYear() +
+    (checkinDate?.getMonth() + 1 > 9 ? "-" : "-0") +
+    (checkinDate?.getMonth() + 1) +
+    "-" +
+    checkinDate?.getDate();
+console.log("CHECKIN DATE FINAL", checkInDateFinal);
+  const handleBackToRooms = () => {
     // console.log("in handle rooms checkin date", checkInDateFinal);
     props.history.push(`/allRooms?checkIn=${checkInDateFinal}`);
-  }
+  };
 
   return (
     <div>
@@ -118,44 +105,21 @@ console.log("user checkin", checkinDate );
       <div className={classes.roomDetailbanner}></div>
       <Container className={classes.roomBannerContainer}>
         <div className={classes.imageContainer}>
-         
-
-           
           <Typography variant="h4" className={classes.roomCategory}>
             {roomDetail?.roomCategory}
-            
-           
+
             <span className={classes.booknowbtnContainer}>
-            <Button className={classes.bookNowBtn} onClick={handleBackToRooms}>
-                  Back to Rooms
-                </Button> 
-              {/* <Link
-                style={{ textDecoration: "none" }}
-                to={{
-                  pathname: "/room-booking-receipt",
-                  state: { roomDetail, userdata },
-                }}
+              <Button
+                className={classes.bookNowBtn}
+                onClick={handleBackToRooms}
               >
-                <Button className={classes.bookNowBtn} onClick={handleBookNow}>
-                  Book Now
-                </Button>
-              </Link> */}
-             
-            </span></Typography>
-            
-           
-          
-
-          <img
-            className={classes.roomImage}
-            src={images[0]}
-          />
-        
-           
-                
-             
+                Back to Rooms
+              </Button>
               
+            </span>
+          </Typography>
 
+          <img className={classes.roomImage} src={images[0]} />
         </div>
       </Container>
 
@@ -203,7 +167,7 @@ console.log("user checkin", checkinDate );
         </Grid>
       </Container>
 
-      <Container >
+      <Container>
         <Grid container spacing={3}>
           {images.length > 0
             ? images.map((item) => (
@@ -266,13 +230,14 @@ console.log("user checkin", checkinDate );
       <Container className={classes.booknowBottom}>
         <Link
           style={{ textDecoration: "none" }}
-          
           to={{
             pathname: "/room-booking-receipt",
             state: { roomDetail, userdata },
           }}
         >
-          <Button className={classes.bookNowBtn} onClick={handleBookNow}>Book Now</Button>
+          <Button className={classes.bookNowBtn} onClick={handleBookNow}>
+            Book Now
+          </Button>
         </Link>
       </Container>
       <Footer />
