@@ -15,36 +15,25 @@ function Receipt(props) {
   let checkinDate = new Date(userDetails.checkIn);
   let checkoutDate = new Date(userDetails.checkOut);
 
-
   //final checkIn formatted date
 
-
   let finalCheckIn =
-  checkinDate?.getFullYear() +
-      ((checkinDate?.getMonth() + 1)> 9 ? "-" : "-0") +
-      (checkinDate?.getMonth() +1)+
-      "-" +
-      checkinDate?.getDate();
+    checkinDate?.getFullYear() +
+    (checkinDate?.getMonth() + 1 > 9 ? "-" : "-0") +
+    (checkinDate?.getMonth() + 1) +
+    "-" +
+    checkinDate?.getDate();
 
-
-  // let finalCheckIn =
-  //   checkinDate.getFullYear() +
-  //   (checkinDate.getMonth() > 9 ? "-" : "-0") +
-  //   checkinDate.getMonth() +
-  //   "-" +
-  //   checkinDate.getDate();
-
- //final checkOut formatted date
-    let finalCheckOut =
+  //final checkOut formatted date
+  let finalCheckOut =
     checkoutDate.getFullYear() +
     (checkoutDate.getMonth() > 9 ? "-" : "-0") +
-    (checkoutDate.getMonth() +1) +
+    (checkoutDate.getMonth() + 1) +
     "-" +
     checkoutDate.getDate();
-    const handleBackToRooms = () => {
-      // console.log("in handle rooms checkin date", checkInDateFinal);
-      props.history.push(`/allRooms?checkIn=${finalCheckIn}`);
-    };
+  const handleBackToRooms = () => {
+    props.history.push(`/allRooms?checkIn=${finalCheckIn}`);
+  };
 
   return (
     <div>
@@ -74,39 +63,38 @@ function Receipt(props) {
                 </div>
               </div>
 
-                {/* Room Price */}
+              {/* Room Price */}
               <div className={classes.Details}>
                 <div className={classes.detailsNames}>Total Amount:</div>
                 <div className={classes.userNamingDetails}>
-                $  {roomDetails.roomPrice}
+                  $ {roomDetails.roomPrice}
                 </div>
               </div>
-             
-              </div>
-             
-              <hr className={classes.hrStyleCheckin} />
-              {/* CheckIn Details */}
-              <div className={classes.checkindetails}>
-                <div className={classes.detailsNames}>Checkin Details</div>
+            </div>
 
-                <div className={classes.Details}>
-                  <div className={classes.detailsNames}> CheckIn: </div>
-                  <div className={classes.userNamingDetails} >{finalCheckIn} </div>
-                </div>
+            <hr className={classes.hrStyleCheckin} />
+            {/* CheckIn Details */}
+            <div className={classes.checkindetails}>
+              <div className={classes.detailsNames}>Checkin Details</div>
 
-                <div className={classes.Details}>
-                  <div className={classes.detailsNames}> CheckOut: </div>
-                  <div className={classes.userNamingDetails}>{finalCheckOut} </div>
+              <div className={classes.Details}>
+                <div className={classes.detailsNames}> CheckIn: </div>
+                <div className={classes.userNamingDetails}>{finalCheckIn} </div>
+              </div>
+
+              <div className={classes.Details}>
+                <div className={classes.detailsNames}> CheckOut: </div>
+                <div className={classes.userNamingDetails}>
+                  {finalCheckOut}{" "}
                 </div>
               </div>
-           
+            </div>
           </Box>
         </Paper>
-      
-          <Button className={classes.bookNowBtn}   onClick={handleBackToRooms}>
-            Back to Rooms
-          </Button>
-        
+
+        <Button className={classes.bookNowBtn} onClick={handleBackToRooms}>
+          Back to Rooms
+        </Button>
       </Container>
       <Footer />
     </div>

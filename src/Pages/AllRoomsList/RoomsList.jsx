@@ -10,12 +10,8 @@ import { Link } from "react-router-dom";
 import { useStyles } from "../AllRoomsList/RoomsList.style";
 
 function RoomsList({ rooms }) {
-  
   const classes = useStyles();
-  console.log("all available rooms:", rooms);
 
-
-  
   return (
     <div>
       <Container className={classes.roomBannerContainer}>
@@ -31,17 +27,18 @@ function RoomsList({ rooms }) {
           </Typography>
           <Typography variant="h6">Your Room. Your Stay.</Typography>
         </div>
-
       </Container>
 
       <Container className={classes.heading}>
-        <Typography variant="h3" className={classes.headingRooms}>Our Rooms</Typography>
+        <Typography variant="h3" className={classes.headingRooms}>
+          Our Rooms
+        </Typography>
         <hr className={classes.hrStyle} />
-        
+
         <div>
-          <Link style={{ textDecoration: "none" }} to={'/roomSearch'}>
+          <Link style={{ textDecoration: "none" }} to={"/roomSearch"}>
             <Button className={classes.backbtn}>Back to Form</Button>
-            </Link>
+          </Link>
         </div>
       </Container>
 
@@ -50,44 +47,48 @@ function RoomsList({ rooms }) {
           <Grid container className={classes.root} spacing={2}>
             <Grid item>
               <Grid container justify="center" spacing={2}>
-                {rooms?.map((fetchRooms) => (
-                  <Grid item>
-                    <Link
-                      style={{ textDecoration: "none" }}
-                      to={`/getRoom/${fetchRooms._id}`}
-                    >
-                      <Card className={classes.card}>
-                        <CardActionArea className={classes.cardBack}>
-                          <CardMedia
-                            component="img"
-                            // alt="Contemplative Reptile"
-                            height="200"
-                            className={classes.cardImage}
-                            image={fetchRooms.roomImages[0]}
-                            title="Rooms"
-                          ></CardMedia>
-                          <div className={classes.roomPrice}>
-                            <span className="hidden-button">
-                              ${fetchRooms.roomPrice}
-                            </span>
-                          </div>
-                          <CardContent>
-                            <Typography
-                              gutterBottom
-                              variant="h5"
-                              component="h2"
-                              className={classes.roomCategory}
-                            >
-                              <span className="roomCategoryContent">
-                                {fetchRooms.roomCategory}
+                {rooms.length > 0 ? (
+                  rooms?.map((fetchRooms) => (
+                    <Grid item>
+                      <Link
+                        style={{ textDecoration: "none" }}
+                        to={`/getRoom/${fetchRooms._id}`}
+                      >
+                        <Card className={classes.card}>
+                          <CardActionArea className={classes.cardBack}>
+                            <CardMedia
+                              component="img"
+                              // alt="Contemplative Reptile"
+                              height="200"
+                              className={classes.cardImage}
+                              image={fetchRooms.roomImages[0]}
+                              title="Rooms"
+                            ></CardMedia>
+                            <div className={classes.roomPrice}>
+                              <span className="hidden-button">
+                                ${fetchRooms.roomPrice}
                               </span>
-                            </Typography>
-                          </CardContent>
-                        </CardActionArea>
-                      </Card>
-                    </Link>
-                  </Grid>
-                ))}
+                            </div>
+                            <CardContent>
+                              <Typography
+                                gutterBottom
+                                variant="h5"
+                                component="h2"
+                                className={classes.roomCategory}
+                              >
+                                <span className="roomCategoryContent">
+                                  {fetchRooms.roomCategory}
+                                </span>
+                              </Typography>
+                            </CardContent>
+                          </CardActionArea>
+                        </Card>
+                      </Link>
+                    </Grid>
+                  ))
+                ) : (
+                  <h1 className={classes.noRooms}>No rooms Available!</h1>
+                )}
               </Grid>
             </Grid>
           </Grid>

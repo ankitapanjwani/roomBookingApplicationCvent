@@ -14,13 +14,7 @@ function AvailableRooms(props) {
     // const checkInDateFinal = props.match.params.checkIn;
     let checkInDateFinal = query.get("checkIn");
     console.log("Checkin date , IN available Room ", typeof(checkInDateFinal));
-    // useEffect(() => {
-    //     (async function () {
-    //       const res = await axios.get(`http://localhost:5000/room/getRooms/${checkInDateFinal}`);
-          
-    //       setallRooms(res.data);
-    //     })();
-    //   }, []);
+    
 
       useEffect(() => {
         console.log("in USEEFFECT");

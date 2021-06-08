@@ -8,73 +8,59 @@ import { Link, Redirect, withRouter } from "react-router-dom";
 import axios from "axios";
 import DatepickerField from "../Datepicker/DatepickerField";
 import { useStyles } from "../SearchForm/SearchForm.style";
-import {getUsersData} from '../../services/axiosData';
-
-
+import { getUsersData } from "../../services/axiosData";
 
 const initialState = {
-    firstName:'',
-    lastName: '',
-    email: '',
-    checkIn: new Date(),
-    checkOut: new Date(),
-  };
+  firstName: "",
+  lastName: "",
+  email: "",
+  checkIn: new Date(),
+  checkOut: new Date(),
+};
 function SearchForm(props) {
   const classes = useStyles();
-  
-  
+
   const [formData, setFormData] = useState(initialState);
-  const[useremail,setuserEmail] = useState('');
-  let userFinalId=  JSON.parse(localStorage.getItem('UserId'));
+  const [useremail, setuserEmail] = useState("");
+  let userFinalId = JSON.parse(localStorage.getItem("UserId"));
 
+  useEffect(() => {
+    (async function () {
+      try {
+        const response = await getUsersData(userFinalId);
 
+        setFormData(response);
 
-    useEffect(() => {
-      (async function () {
-
-        try{
-
-          const response = await getUsersData(userFinalId);
-          console.log("data in search form",response);
-          setFormData(response);
-          // console.log("get USERS RESPONSE CHECKIN", response);
-          setuserEmail(response.email);
-        }
-        catch(error){
-            console.log(error);
-        }
-      })();
-    }, []);
-    
-    console.log("user data from setdata", formData);
+        setuserEmail(response.email);
+      } catch (error) {
+        console.log(error);
+      }
+    })();
+  }, []);
 
   const handleInputChange = (event) => {
-    // event.persist();
     const key = event.target.name;
     const value = event.target.value;
-    // const date = date;
+
     setFormData((inputs) => ({
       ...inputs,
       [key]: value,
     }));
   };
-  
-  console.log("FORM STATE", formData.checkIn);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // console.log("In handle submit");
-    // console.log("form", formData.checkIn);
 
     let checkInDateFULL = new Date(formData.checkIn);
     let checkOutDateFULL = new Date(formData.checkOut);
-  
+
     let checkinYear = checkInDateFULL.getFullYear();
     let checkoutYear = checkOutDateFULL.getFullYear();
     let checkinMonth = checkInDateFULL.getMonth() + 1;
     let checkoutMonth = checkOutDateFULL.getMonth() + 1;
     let checkinDay = checkInDateFULL.getDate();
     let checkoutDay = checkOutDateFULL.getDate();
-  
+
     //final dates of checkin and checkout
     let checkInDateFinal =
       checkinYear +
@@ -82,9 +68,7 @@ function SearchForm(props) {
       checkinMonth +
       "-" +
       checkinDay;
-  
-      // console.log("CheckIN date Final", checkInDateFinal);
-      // console.log("CheckIN day Final", checkinDay);
+
     let checkOutDateFinal =
       checkoutYear +
       (checkoutMonth > 9 ? "-" : "-0") +
@@ -92,55 +76,41 @@ function SearchForm(props) {
       "-" +
       checkoutDay;
 
-
-      // console.log("CheckOUT date Final", checkOutDateFinal);
     let userDetail = {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        checkIn: formData.checkIn,
-        checkOut: formData.checkOut,
-      };
-      
-    if(formData.email === useremail){
-        console.log("in IF BLOCK");
-        console.log("USER FINAL ID:", userFinalId);
-        try {
-            const res = await axios.put(
-              `http://localhost:5000/user/updateUserDetails/${userFinalId}`,
-              userDetail
-            );
-                    console.log("User updated details", res.data);
-                    props.history.push(`/allRooms?checkIn=${checkInDateFinal}`);
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      checkIn: formData.checkIn,
+      checkOut: formData.checkOut,
+    };
 
-              } catch (err) {
-            console.log(err);
-          }
-    }
-    
-      else{
-console.log("In else ");
-    try {
-      const res = await axios.post(
-        "http://localhost:5000/user/addUserDetails",
-        userDetail
-      );
+    if (formData.email === useremail) {
+      try {
+         await axios.put(
+          `http://localhost:5000/user/updateUserDetails/${userFinalId}`,
+          userDetail
+        );
 
-    //   setDataId(res.data._id);
-      let userId = res.data._id;
-      // console.log("res of user  id Details", res.data._id);
-      // console.log("res of user Details", res.data);
+        props.history.push(`/allRooms?checkIn=${checkInDateFinal}`);
+      } catch (err) {
+        console.log(err);
+      }
+    } else {
+      try {
+        const res = await axios.post(
+          "http://localhost:5000/user/addUserDetails",
+          userDetail
+        );
 
-        localStorage.setItem('UserId',JSON.stringify(userId));
-        
+        let userId = res.data._id;
+
+        localStorage.setItem("UserId", JSON.stringify(userId));
       } catch (err) {
         console.log(err);
       }
       props.history.push(`/allRooms?checkIn=${checkInDateFinal}`);
-}
+    }
   };
-
-
 
   return (
     <div>
@@ -154,7 +124,9 @@ console.log("In else ");
                     className={classes.halfpaneImage}
                     src={process.env.PUBLIC_URL + "/images/beech.jpg"}
                   />
-                  <Typography variant="h6" className={classes.bookRoomTitle}>Stay with Us! Go Grab Amazing Rooms!</Typography>
+                  <Typography variant="h6" className={classes.bookRoomTitle}>
+                    Stay with Us! Go Grab Amazing Rooms!
+                  </Typography>
                 </div>
               </Box>
             </Paper>
@@ -168,7 +140,9 @@ console.log("In else ");
                   noValidate
                   autoComplete="off"
                 >
-                  <Typography variant="h4" className={classes.bookRoomTitle}>Book Your Room</Typography>
+                  <Typography variant="h4" className={classes.bookRoomTitle}>
+                    Book Your Room
+                  </Typography>
                   <div className={classes.formFields}>
                     <div>
                       <TextField
@@ -247,43 +221,19 @@ console.log("In else ");
 
 export default withRouter(SearchForm);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // const [userData, setUserData] = useState();
-  // useEffect(() => {
-  //     // get call for User
-  //     axios
-  //     .get(`http://localhost:5000/user/getUser/${userFinalId}`)
-  //     .then((response) => {
-  //         console.log("Response:", response.data);
-  //       //   let usersData = response.data;
-  //         setFormData(response.data);
-  //       //   console.log("Get request response:", formData);
-  //               setuserEmail(response.data.email);
-  //       })
-  //       .catch((err) => {
-  //           console.log("Error:", err);
-  //       });
-  //   }, []);
+// useEffect(() => {
+//     // get call for User
+//     axios
+//     .get(`http://localhost:5000/user/getUser/${userFinalId}`)
+//     .then((response) => {
+//         console.log("Response:", response.data);
+//       //   let usersData = response.data;
+//         setFormData(response.data);
+//       //   console.log("Get request response:", formData);
+//               setuserEmail(response.data.email);
+//       })
+//       .catch((err) => {
+//           console.log("Error:", err);
+//       });
+//   }, []);
