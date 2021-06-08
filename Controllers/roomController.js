@@ -204,24 +204,17 @@ exports.getroomById = async (request, response, next) => {
   }
 };
 
-// router.put('/rooms/:id', (req, res, next) => {
-//   Room.findByIdAndUpdate({_id: req.params.id}, req.body)
-//   .then(() => {
-//       Room.findOne({_id: req.params.id})
-//       .then( room => {
-//           res.send(room);
-//       });
-//   });
-// });
+
 
 exports.updateRoomDates = async (request, response, next) => {
+  console.log("In rooms update controller");
   const roomId = request.params.id;
   console.log("Room id: ", roomId);
   const checkIn = request.body.checkIn;
   const checkOut = request.body.checkOut;
   const checkInDate = new Date(checkIn);
   const checkOutDate = new Date(checkOut);
-console.log("checkin :", checkIn,"formatted:", checkInDate);
+  console.log("checkin :", checkIn,"formatted:", checkInDate);
   // db.Employee.update(
   //   {"Employeeid" : 1},
   //   {$set: { "EmployeeName" : "NewMartin"}});
@@ -261,7 +254,15 @@ console.log("checkin :", checkIn,"formatted:", checkInDate);
 
 
 
-
+// router.put('/rooms/:id', (req, res, next) => {
+//   Room.findByIdAndUpdate({_id: req.params.id}, req.body)
+//   .then(() => {
+//       Room.findOne({_id: req.params.id})
+//       .then( room => {
+//           res.send(room);
+//       });
+//   });
+// });
 
 
 
