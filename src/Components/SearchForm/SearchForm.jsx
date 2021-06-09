@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -8,51 +8,72 @@ import { Link, Redirect, withRouter } from "react-router-dom";
 import axios from "axios";
 import DatepickerField from "../Datepicker/DatepickerField";
 import { useStyles } from "../SearchForm/SearchForm.style";
-import { getUsersData } from "../../services/axiosData";
+import { getUsersData, postUsersData } from "../../services/axiosData";
+import { UserContext } from "../../App";
 
-const initialState = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  checkIn: new Date(),
-  checkOut: new Date(),
-};
+
 function SearchForm(props) {
+  // const initialState = {
+  //   firstName: "",
+  //   lastName: "",
+  //   email: "",
+  //   checkIn: new Date(),
+  //   checkOut: new Date(),
+  // };
   const classes = useStyles();
 
-  const [formData, setFormData] = useState(initialState);
-  const [useremail, setuserEmail] = useState("");
+  const { usersData, userDataEmail} = useContext(UserContext);
+
+  //destructuring
+  const [usersdata, setUsersData] = usersData;
+  const [userEmail, setUserEmail] = userDataEmail;
+
+  // const [serData, setFormData] = useState(initialState);
   let userFinalId = JSON.parse(localStorage.getItem("UserId"));
 
   useEffect(() => {
     (async function () {
       try {
-        const response = await getUsersData(userFinalId);
+        const responseUser = await getUsersData(userFinalId);
 
-        setFormData(response);
-
-        setuserEmail(response.email);
+        setUsersData(responseUser);
+        console.log("RESPONSE USER IN SEARCH FORM", responseUser);
+        setUserEmail(responseUser.email)
+       
       } catch (error) {
         console.log(error);
       }
     })();
   }, []);
+  // const [useremail, setuserEmail] = useState('');
 
+
+  
+  console.log("Users Data EMAIL FROM CONTEXT:", userEmail);
+  
   const handleInputChange = (event) => {
     const key = event.target.name;
     const value = event.target.value;
 
-    setFormData((inputs) => ({
+    setUsersData((inputs) => ({
       ...inputs,
       [key]: value,
     }));
   };
+  
+  // useEffect(() => {
+  //   setuserEmail(usersData.email);
+  // }, []);
+  // console.log("Set Users EMAIL",useremail);
+
+
+
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    let checkInDateFULL = new Date(formData.checkIn);
-    let checkOutDateFULL = new Date(formData.checkOut);
+    let checkInDateFULL = new Date(usersdata.checkIn);
+    let checkOutDateFULL = new Date(usersdata.checkOut);
 
     let checkinYear = checkInDateFULL.getFullYear();
     let checkoutYear = checkOutDateFULL.getFullYear();
@@ -77,16 +98,19 @@ function SearchForm(props) {
       checkoutDay;
 
     let userDetail = {
-      firstName: formData.firstName,
-      lastName: formData.lastName,
-      email: formData.email,
-      checkIn: formData.checkIn,
-      checkOut: formData.checkOut,
+      firstName: usersdata.firstName,
+      lastName: usersdata.lastName,
+      email: usersdata.email,
+      checkIn: usersdata.checkIn,
+      checkOut: usersdata.checkOut,
     };
+    // console.log(" SEARCH FORM EMAIL:", useremail);
 
-    if (formData.email === useremail) {
+
+
+    if (usersdata.email == userEmail) {
       try {
-         await axios.put(
+        await axios.put(
           `http://localhost:5000/user/updateUserDetails/${userFinalId}`,
           userDetail
         );
@@ -97,12 +121,14 @@ function SearchForm(props) {
       }
     } else {
       try {
-        const res = await axios.post(
-          "http://localhost:5000/user/addUserDetails",
-          userDetail
-        );
-
-        let userId = res.data._id;
+        // const res = await axios.post(
+        //   "http://localhost:5000/user/addUserDetails",
+        //   userDetail
+        // );
+        const res = await postUsersData(userDetail);
+        //  console.log("post user details CONTEXT", res);
+        let userId = res._id;
+        // console.log("USER ID IN SEARCHFORM", userId);
 
         localStorage.setItem("UserId", JSON.stringify(userId));
       } catch (err) {
@@ -149,7 +175,7 @@ function SearchForm(props) {
                         id="outlined-basic"
                         label="FirstName"
                         name="firstName"
-                        value={formData.firstName}
+                        value={usersdata.firstName}
                         onChange={handleInputChange}
                         variant="outlined"
                         type="text"
@@ -161,7 +187,7 @@ function SearchForm(props) {
                         id="outlined-basic"
                         label="LastName"
                         name="lastName"
-                        value={formData.lastName}
+                        value={usersdata.lastName}
                         onChange={handleInputChange}
                         variant="outlined"
                         type="text"
@@ -173,7 +199,7 @@ function SearchForm(props) {
                         id="outlined-basic"
                         label="Email"
                         name="email"
-                        value={formData.email}
+                        value={usersdata.email}
                         onChange={handleInputChange}
                         variant="outlined"
                         className={classes.textfieldWidth}
@@ -184,7 +210,7 @@ function SearchForm(props) {
                       <DatepickerField
                         name="checkIn"
                         label="Check In Date"
-                        value={formData.checkIn}
+                        value={usersdata.checkIn}
                         onchange={handleInputChange}
                         className={classes.textfieldWidth}
                       />
@@ -194,7 +220,7 @@ function SearchForm(props) {
                       <DatepickerField
                         name="checkOut"
                         label="Check Out Date"
-                        value={formData.checkOut}
+                        value={usersdata.checkOut}
                         onchange={handleInputChange}
                         className={classes.textfieldWidth}
                       />

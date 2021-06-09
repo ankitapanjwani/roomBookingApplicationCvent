@@ -1,6 +1,7 @@
 import { Box, Button, Container, Paper, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { UserContext } from "../../App";
 import Footer from "../Footer/Footer";
 import Header from "../Header/Header";
 import { useStyles } from "../RoomReceipt/Receipt.style";
@@ -9,11 +10,13 @@ function Receipt(props) {
   const classes = useStyles();
   //getting room and user details
   let roomDetails = props.location.state.roomDetail;
-  let userDetails = props.location.state.userdata;
+  // let userDetails = props.location.state.userdata;
+  const { usersData } = useContext(UserContext);
+  const [usersDataContext, setUsersDataContext] = usersData;
 
   //formatting checkin and checkout date
-  let checkinDate = new Date(userDetails.checkIn);
-  let checkoutDate = new Date(userDetails.checkOut);
+  let checkinDate = new Date(usersDataContext.checkIn);
+  let checkoutDate = new Date(usersDataContext.checkOut);
 
   //final checkIn formatted date
 
@@ -51,7 +54,7 @@ function Receipt(props) {
               <div className={classes.Details}>
                 <div className={classes.detailsNames}>Name:</div>
                 <div className={classes.userNamingDetails}>
-                  {userDetails.firstName} {userDetails.lastName}
+                  {usersDataContext.firstName} {usersDataContext.lastName}
                 </div>
               </div>
 

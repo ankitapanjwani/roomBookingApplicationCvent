@@ -4,3 +4,14 @@ export const getUsersData = async (id) => {
     return res.data;
   
   }
+
+  export const postUsersData = async (userDetails) => {
+    const res = await axios.post(
+      "http://localhost:5000/user/addUserDetails",
+      userDetails
+    );
+    return res.data;
+    // console.log("POST USERS DETAILS IN AXIOSDATA", res);
+  
+  
+  }

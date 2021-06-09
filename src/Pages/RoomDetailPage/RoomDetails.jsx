@@ -232,7 +232,7 @@ console.log("CHECKIN DATE FINAL", checkInDateFinal);
           style={{ textDecoration: "none" }}
           to={{
             pathname: "/room-booking-receipt",
-            state: { roomDetail, userdata },
+            state: { roomDetail/* , userdata  */},
           }}
         >
           <Button className={classes.bookNowBtn} onClick={handleBookNow}>
